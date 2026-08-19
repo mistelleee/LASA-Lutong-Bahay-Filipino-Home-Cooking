@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lasa</title>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--w:#1C1408;--w2:#231A0F;--w3:#2E2214;--w4:#3A2E1E;--b:#D4A76A;--b2:#8B6914;--c:#F0E0C8;--c2:#C8B89A;--c3:#7A6A50;--rd:#C0392B;--gn:#5A8A3A;--or:#E67E22;--pg:#EDE4D0}
+body{background:var(--w);color:var(--c);font-family:'Lora',serif;font-size:15px;line-height:1.7;overflow-x:hidden;background-image:repeating-linear-gradient(transparent,transparent 7px,rgba(212,167,106,.02) 7px,rgba(212,167,106,.02) 8px),repeating-linear-gradient(90deg,transparent,transparent 7px,rgba(212,167,106,.012) 7px,rgba(212,167,106,.012) 8px)}
+body::after{content:'';position:fixed;inset:0;pointer-events:none;opacity:.02;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:140px}
+::selection{background:rgba(212,167,106,.25)}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--w)}::-webkit-scrollbar-thumb{background:#6B4A20}
+.wrap{max-width:820px;margin:0 auto;padding:0 20px}
+.view{display:none}.view.on{display:block;animation:fi .5s ease}
+@keyframes fi{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+/* HEADER */
+.hd{position:sticky;top:0;z-index:40;background:rgba(28,20,8,.96);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:2px solid rgba(212,167,106,.08)}
+.hd-in{max-width:820px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:46px;padding:0 20px}
+.hd-l{font-family:'Caveat',cursive;font-size:20px;font-weight:700;color:var(--b)}
+.hd-r{display:flex;gap:16px;align-items:center}
+.hd-btn{font-family:'DM Mono',monospace;font-size:9px;font-weight:400;letter-spacing:.12em;text-transform:uppercase;color:var(--c3);background:none;border:none;cursor:pointer;transition:color .2s;padding:0}
+.hd-btn:hover{color:var(--b)}
+.hd-back{color:var(--b);display:none}.show-back .hd-back{display:inline}
+
+/* KUBO HERO */
+.kubo-hero{text-align:center;padding:40px 20px 20px;animation:fi .8s ease both}
+.kubo-wrap{display:inline-block;position:relative}
+.kubo-roof{width:0;height:0;border-left:70px solid transparent;border-right:70px solid transparent;border-bottom:45px solid #8B6914;margin:0 auto}
+.kubo-body{width:140px;height:50px;background:var(--w3);border:2px solid #5A4A2E;margin:0 auto;position:relative;overflow:hidden}
+.kubo-body::before{content:'';position:absolute;inset:3px;background-image:repeating-linear-gradient(45deg,transparent,transparent 5px,rgba(212,167,106,.06) 5px,rgba(212,167,106,.06) 6px),repeating-linear-gradient(-45deg,transparent,transparent 5px,rgba(212,167,106,.06) 5px,rgba(212,167,106,.06) 6px)}
+.kubo-door{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:26px;height:32px;background:#1A1408;border:1.5px solid #6B4A10;border-bottom:none;border-radius:2px 2px 0 0}
+.kubo-door::after{content:'';position:absolute;top:50%;right:4px;width:3px;height:3px;border-radius:50%;background:#D4A76A}
+.kubo-legs{display:flex;justify-content:space-between;padding:0 18px;margin:0 auto;width:140px}
+.kubo-legs span{width:5px;height:20px;background:#5A3A08;display:block}
+.kubo-sign{position:absolute;top:8px;left:50%;transform:translateX(-50%);font-family:'Caveat',cursive;font-size:18px;font-weight:700;color:#D4A76A;animation:sway 6s ease-in-out infinite;white-space:nowrap}
+@keyframes sway{0%,100%{transform:translateX(-50%) rotate(0)}25%{transform:translateX(-50%) rotate(.5deg)}75%{transform:translateX(-50%) rotate(-.5deg)}}
+.hero-title{font-family:'Caveat',cursive;font-size:clamp(48px,10vw,72px);font-weight:700;color:var(--c);line-height:.9;margin-top:16px;text-shadow:2px 2px 0 rgba(0,0,0,.2)}
+.hero-sub{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--c3);margin-top:8px}
+.orn{text-align:center;color:#6B4A20;font-size:12px;letter-spacing:.5em;margin:24px 0;opacity:.5}
+
+/* FILTERS */
+.filt{display:flex;flex-direction:column;gap:12px;margin:20px 0 24px;padding-bottom:20px;border-bottom:1px solid rgba(212,167,106,.08)}
+.f-search{width:100%;background:var(--w2);border:1px solid rgba(212,167,106,.1);border-radius:4px;padding:11px 16px;font-family:'Lora',serif;font-size:14px;color:var(--c);outline:none;transition:border-color .3s}
+.f-search:focus{border-color:var(--b)}.f-search::placeholder{color:#5A4A38;font-style:italic}
+.cats{display:flex;flex-wrap:wrap;gap:4px}
+.cat{font-family:'Caveat',cursive;font-size:16px;font-weight:600;padding:6px 14px;border:1px solid rgba(212,167,106,.06);background:transparent;color:var(--c3);cursor:pointer;transition:all .25s;border-radius:3px}
+.cat:hover{border-color:rgba(212,167,106,.2);color:var(--c2)}.cat.on{border-color:var(--b);color:var(--b);background:rgba(212,167,106,.04)}
+
+/* BOOK GRID */
+.bg{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;padding-bottom:60px}
+.bk-card{perspective:800px;cursor:pointer;opacity:0;animation:fadeUp .5s ease forwards}
+@keyframes fadeUp{to{opacity:1;transform:none}}
+.bk{transition:transform .5s cubic-bezier(.16,1,.3,1),box-shadow .5s}
+.bk-card:hover .bk{transform:translateY(-8px) rotateY(-6deg) rotateX(2deg)}
+.bk-front{background:linear-gradient(150deg,#3A2E1E,#2E2214);border:2px solid #6B4A20;box-shadow:3px 3px 0 #141008,6px 6px 0 #1a1408,0 8px 24px rgba(0,0,0,.2);padding:22px 16px 18px 22px;position:relative;overflow:hidden;transition:box-shadow .5s}
+.bk-card:hover .bk-front{box-shadow:5px 5px 0 #141008,9px 9px 0 #1a1408,0 14px 40px rgba(0,0,0,.3)}
+.bk-front::before{content:'';position:absolute;inset:6px;border:1px solid rgba(212,167,106,.06);pointer-events:none}
+.bk-spine{position:absolute;left:0;top:0;bottom:0;width:12px;background:linear-gradient(90deg,#2A1E10,#342818 50%,#3A2E1E);border-right:1px solid rgba(212,167,106,.03)}
+.bk-pages{position:absolute;right:2px;top:8px;bottom:8px;width:4px;background:repeating-linear-gradient(180deg,#E8DFD0 0 1.5px,#D8D0C0 1.5px 2.5px);border-radius:0 1px 1px 0;opacity:.2;transition:opacity .4s}
+.bk-card:hover .bk-pages{opacity:.45}
+.bk-content{position:relative;z-index:1;padding-left:6px;text-align:center}
+.bk-init{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--b2),var(--b));display:flex;align-items:center;justify-content:center;font-family:'Caveat',cursive;font-size:24px;font-weight:700;color:var(--w);margin:0 auto 10px;box-shadow:0 2px 10px rgba(139,105,20,.2)}
+.bk-name{font-family:'Caveat',cursive;font-size:19px;font-weight:700;color:var(--c);line-height:1.15;margin-bottom:2px}
+.bk-alt{font-size:11px;color:var(--c3);font-style:italic;margin-bottom:12px;line-height:1.3}
+.bk-line{width:24px;height:1px;background:#6B4A20;margin:0 auto 8px;opacity:.4}
+.bk-meta{font-family:'DM Mono',monospace;font-size:8.5px;color:#5A4A38;letter-spacing:.04em}
+.bk-fav{position:absolute;top:8px;right:8px;background:none;border:none;font-size:16px;color:#5A4A38;cursor:pointer;transition:all .2s;z-index:2;padding:0;line-height:1}
+.bk-fav:hover{transform:scale(1.2)}.bk-fav.on{color:var(--rd)}
+.empty{text-align:center;padding:60px 0;color:var(--c3);font-style:italic;font-size:14px}
+
+/* DETAIL — BOOK SPREAD */
+.sp-head{text-align:center;padding:36px 0 16px}
+.sp-head .cat-l{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--or);margin-bottom:4px}
+.sp-head h1{font-family:'Caveat',cursive;font-size:clamp(32px,7vw,48px);font-weight:700;line-height:1;color:var(--c);margin-bottom:3px}
+.sp-head .alt{font-size:14px;color:var(--c3);font-style:italic}
+.sp-head .rule{width:40px;height:2px;background:var(--b);margin:14px auto}
+.sp-desc{border-left:3px solid #8B6914;padding-left:18px;margin:0 0 24px;font-style:italic;color:var(--c2);font-size:14.5px;line-height:1.65;max-width:500px}
+.sp-book{display:grid;grid-template-columns:1fr 1fr;background:var(--pg);border:2px solid #6B4A20;box-shadow:4px 4px 0 #141008,8px 8px 0 #1a1408,0 16px 50px rgba(0,0,0,.25);position:relative;margin-bottom:24px}
+.sp-book::after{content:'';position:absolute;top:0;bottom:0;left:50%;width:6px;transform:translateX(-50%);background:linear-gradient(90deg,rgba(0,0,0,.05),transparent,rgba(0,0,0,.04));z-index:2;pointer-events:none}
+.pg-l,.pg-r{padding:24px 20px;color:#3A3832;position:relative;z-index:1}
+.pg-l{border-right:1px solid rgba(0,0,0,.03)}
+.pg-h{font-family:'Caveat',cursive;font-size:22px;font-weight:600;color:var(--b);margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid rgba(0,0,0,.06)}
+.stats{display:flex;margin-bottom:16px;border:1px solid rgba(0,0,0,.05)}
+.stat{flex:1;text-align:center;padding:10px 0;border-right:1px solid rgba(0,0,0,.04)}.stat:last-child{border-right:none}
+.sl{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:#7A6A50;margin-bottom:2px}
+.sv{font-family:'Caveat',cursive;font-size:22px;font-weight:700;color:#3A3832}
+.serv-bar{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.serv-lbl{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#7A6A50}
+.serv-btn{width:28px;height:28px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(0,0,0,.08);background:var(--pg);color:#6B6560;cursor:pointer;font-size:16px;transition:all .2s;font-family:'Lora',serif}
+.serv-btn:hover{border-color:var(--b);color:var(--b)}
+.serv-v{font-family:'Caveat',cursive;font-size:26px;font-weight:700;min-width:30px;text-align:center;color:#3A3832}
+.ings{list-style:none;padding:0}
+.ings li{display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid rgba(0,0,0,.04);font-size:13.5px;cursor:pointer;transition:all .2s;color:#3A3832}
+.ings li:hover{background:rgba(107,39,55,.02);padding-left:4px}
+.ings li.done{color:#B0A898;text-decoration:line-through}
+.ichk{width:16px;height:16px;border:1.5px solid rgba(0,0,0,.1);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9px;color:transparent;transition:all .2s;margin-top:2px;border-radius:2px}
+.ings li.done .ichk{border-color:var(--gn);color:var(--gn);background:rgba(90,138,58,.06)}
+.iamt{font-family:'DM Mono',monospace;font-size:11px;color:#7A6A50;min-width:60px;font-weight:400}
+.stps{list-style:none;padding:0;counter-reset:st}
+.stps li{counter-increment:st;display:flex;gap:10px;padding:10px 0;border-bottom:1px solid rgba(0,0,0,.04);font-size:13.5px;line-height:1.7;color:#3A3832}
+.stps li::before{content:counter(st);font-family:'Caveat',cursive;font-size:20px;color:var(--b);min-width:20px;text-align:center;padding-top:0}
+.story-b{border-left:3px solid var(--gn);padding:14px 16px;background:rgba(90,138,58,.04);margin:16px 0;font-size:13.5px;color:#3A3832;line-height:1.7}
+.story-b strong{color:var(--gn)}
+.tip-b{border-left:3px solid var(--or);padding:14px 16px;background:rgba(230,126,34,.04);margin:16px 0;font-size:13.5px;font-style:italic;color:#3A3832;line-height:1.7}
+.tip-b strong{font-style:normal;color:var(--or)}
+.acts{display:flex;gap:8px;margin-top:28px;padding-top:20px;border-top:1px solid rgba(212,167,106,.08);flex-wrap:wrap}
+.ab{font-family:'DM Mono',monospace;font-size:10px;font-weight:400;letter-spacing:.1em;text-transform:uppercase;padding:11px 20px;cursor:pointer;transition:all .3s}
+.ab-cook{background:var(--b2);color:var(--c);border:2px solid var(--b2)}.ab-cook:hover{background:var(--b);border-color:var(--b)}
+.ab-fav{background:transparent;border:1px solid rgba(212,167,106,.1);color:var(--c3)}.ab-fav:hover,.ab-fav.on{border-color:var(--rd);color:var(--rd)}
+.ab-shop{background:transparent;border:1px solid rgba(212,167,106,.1);color:var(--c3)}.ab-shop:hover{border-color:var(--b);color:var(--b)}
+
+/* COOKING MODE */
+.cook{position:fixed;inset:0;z-index:80;background:#0F0C06;display:none;flex-direction:column}
+.cook.on{display:flex;animation:fi .4s ease}
+.cook::before{content:'';position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse 400px 300px at 50% 15%,rgba(212,167,106,.05),transparent);animation:candle 4s ease-in-out infinite}
+@keyframes candle{0%,100%{opacity:.5}50%{opacity:.7}}
+.cook-hdr{padding:14px 20px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(212,167,106,.06);position:relative;z-index:1}
+.cook-title{font-family:'Caveat',cursive;font-size:18px;font-weight:600;color:var(--b)}
+.cook-close{background:none;border:1px solid rgba(212,167,106,.1);color:var(--c3);font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;padding:6px 12px;cursor:pointer;transition:all .2s}
+.cook-close:hover{border-color:var(--b);color:var(--b)}
+.cook-body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;position:relative;z-index:1;overflow-y:auto}
+.cook-step{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(212,167,106,.35);margin-bottom:10px}
+.cook-num{font-family:'Caveat',cursive;font-size:64px;color:rgba(212,167,106,.07);line-height:.8;margin-bottom:8px}
+.cook-text{font-size:clamp(18px,3vw,24px);line-height:1.6;max-width:520px;color:rgba(240,224,200,.85)}
+.cook-text .thl{color:var(--or);font-weight:600}
+.cook-timer{margin:16px 0}
+.cook-tbtn{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:9px 20px;border:1px solid rgba(212,167,106,.15);background:rgba(212,167,106,.04);color:var(--b);cursor:pointer;transition:all .3s}
+.cook-tbtn:hover{border-color:var(--b);background:rgba(212,167,106,.1)}
+.cook-td{font-family:'Caveat',cursive;font-size:44px;color:var(--or);margin-top:8px;animation:tpulse 2s ease-in-out infinite}
+@keyframes tpulse{0%,100%{opacity:1}50%{opacity:.6}}
+.cook-nav{display:flex;gap:8px;margin-top:20px}
+.cook-nav button{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:10px 24px;cursor:pointer;transition:all .3s}
+.cn-p{background:transparent;border:1px solid rgba(212,167,106,.1);color:var(--c3)}.cn-p:hover{border-color:rgba(212,167,106,.3);color:var(--c2)}
+.cn-n{background:var(--b2);border:1px solid var(--b2);color:var(--c)}.cn-n:hover{background:var(--b);border-color:var(--b)}
+.cook-bar{padding:12px 20px;border-top:1px solid rgba(212,167,106,.05);position:relative;z-index:1}
+.cook-bar-t{height:3px;background:rgba(212,167,106,.04);border-radius:2px}
+.cook-bar-f{height:100%;background:linear-gradient(90deg,var(--b2),var(--b));border-radius:2px;transition:width .5s;width:0}
+.cook-done h2{font-family:'Caveat',cursive;font-size:40px;color:var(--or);margin-bottom:6px}
+.cook-done p{color:var(--c3)}
+.mise{text-align:center}
+.mise h3{font-family:'Caveat',cursive;font-size:28px;color:var(--c);margin-bottom:4px}
+.mise p{font-size:12px;color:var(--c3);margin-bottom:20px}
+.mise-g{display:grid;grid-template-columns:1fr 1fr;gap:4px;max-width:460px;margin:0 auto;text-align:left}
+.mise-i{display:flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid rgba(212,167,106,.05);cursor:pointer;transition:all .2s;font-size:13px;color:rgba(240,224,200,.5)}
+.mise-i:hover{border-color:rgba(212,167,106,.12);color:var(--c)}
+.mise-i.done{color:rgba(255,255,255,.2);text-decoration:line-through}
+.mise-c{width:15px;height:15px;border:1.5px solid rgba(212,167,106,.1);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:8px;color:transparent;transition:all .2s;border-radius:2px}
+.mise-i.done .mise-c{border-color:var(--gn);color:var(--gn)}
+
+/* SHOPPING */
+.sh-h{text-align:center;padding:32px 0 12px}
+.sh-h h1{font-family:'Caveat',cursive;font-size:36px;font-weight:700;color:var(--c)}
+.sh-h em{color:var(--b);font-style:normal}
+.sh-cnt{font-family:'DM Mono',monospace;font-size:11px;color:var(--c3);text-align:center;margin-bottom:16px}
+.sh-sec{font-family:'Caveat',cursive;font-size:16px;font-weight:600;color:var(--b);margin:18px 0 6px;padding-bottom:5px;border-bottom:1px solid rgba(212,167,106,.08)}
+.sh-i{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid rgba(212,167,106,.03);font-size:13.5px;cursor:pointer;transition:all .2s}
+.sh-i:hover{background:rgba(212,167,106,.02);padding-left:4px}
+.sh-i.done{color:var(--c3);text-decoration:line-through}
+.sh-price{font-family:'DM Mono',monospace;font-size:10px;color:#5A4A38;margin-left:auto}
+.sh-total{display:flex;justify-content:space-between;align-items:center;margin-top:20px;padding:12px 0;border-top:2px solid rgba(212,167,106,.1)}
+.sh-total-l{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--c3)}
+.sh-total-v{font-family:'Caveat',cursive;font-size:26px;font-weight:700;color:var(--or)}
+
+/* MODAL */
+.mo{position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);display:flex;align-items:center;justify-content:center;z-index:100;opacity:0;pointer-events:none;transition:opacity .3s}
+.mo.open{opacity:1;pointer-events:auto}
+.md{background:var(--w2);border:1px solid rgba(212,167,106,.1);padding:28px;width:440px;max-width:94vw;max-height:85vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.4);transform:translateY(14px);transition:transform .35s cubic-bezier(.16,1,.3,1);position:relative;border-radius:4px}
+.md::-webkit-scrollbar{width:4px}.md::-webkit-scrollbar-thumb{background:#6B4A20}
+.mo.open .md{transform:translateY(0)}
+.md::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--b)}
+.md h3{font-family:'Caveat',cursive;font-size:26px;font-weight:700;margin-bottom:20px;color:var(--c)}
+.mf{margin-bottom:12px}
+.ml{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--c3);margin-bottom:4px;display:block}
+.mi{width:100%;background:var(--w3);border:1px solid rgba(212,167,106,.06);border-radius:3px;padding:9px 12px;font-family:'Lora',serif;font-size:14px;color:var(--c);outline:none;transition:border-color .3s}
+.mi:focus{border-color:var(--b)}
+select.mi{cursor:pointer}
+.mr{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mb{display:flex;gap:8px;margin-top:20px;justify-content:flex-end}
+.btn{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:10px 18px;cursor:pointer;transition:all .3s}
+.btn-p{background:var(--b2);color:var(--c);border:2px solid var(--b2)}.btn-p:hover{background:var(--b);border-color:var(--b)}
+.btn-s{background:transparent;color:var(--c3);border:1px solid rgba(212,167,106,.08)}.btn-s:hover{border-color:rgba(212,167,106,.2);color:var(--c2)}
+.ma{display:flex;align-items:center;gap:5px;margin-bottom:5px}
+.ma input{flex:1;background:var(--w3);border:1px solid rgba(212,167,106,.04);padding:6px 8px;font-family:'Lora',serif;font-size:13px;color:var(--c);outline:none;border-radius:2px}
+.ma input:focus{border-color:var(--b)}
+.ma button{background:none;border:none;color:var(--c3);cursor:pointer;font-size:15px;padding:0 3px}.ma button:hover{color:var(--rd)}
+.al{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--c3);cursor:pointer;background:none;border:none;padding:3px 0;transition:color .2s}.al:hover{color:var(--b)}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--w4);color:var(--c);font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.06em;padding:10px 22px;z-index:200;border:1px solid #6B4A20;animation:ti .4s ease,tout .4s ease 2s forwards;white-space:nowrap}
+@keyframes ti{from{opacity:0;transform:translateX(-50%) translateY(12px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+@keyframes tout{to{opacity:0;transform:translateX(-50%) translateY(12px)}}
+
+@media(max-width:640px){
+.bg{grid-template-columns:1fr 1fr;gap:8px}
+.bk-front{padding:16px 12px 14px 18px}.bk-name{font-size:16px}.bk-init{width:36px;height:36px;font-size:20px}
+.sp-book{grid-template-columns:1fr}.pg-l{border-right:none;border-bottom:1px solid rgba(0,0,0,.04)}
+.sp-book::after{display:none}
+.mise-g{grid-template-columns:1fr}
+.hero-title{font-size:42px}
+}
+</style>
+</head>
+<body>
+
+<header class="hd"><div class="hd-in">
+<button class="hd-btn hd-back" id="back">\u2190 Recipes</button>
+<span class="hd-l">Lasa</span>
+<div class="hd-r"><button class="hd-btn" id="shopBtn">Pamilihan (<span id="sN">0</span>)</button><button class="hd-btn" id="addBtn">+ Recipe</button></div>
+</div></header>
+
+<div class="view on" id="v-home">
+<div class="kubo-hero"><div class="kubo-wrap">
+<div class="kubo-sign">Lasa</div>
+<div class="kubo-roof"></div>
+<div class="kubo-body"><div class="kubo-door"></div></div>
+<div class="kubo-legs"><span></span><span></span><span></span></div>
+</div>
+<h1 class="hero-title">Lasa</h1>
+<p class="hero-sub">Lutong Bahay \u2014 Filipino Home Cooking</p>
+</div>
+<div class="orn">\u25C7</div>
+<div class="wrap">
+<div class="filt"><input class="f-search" id="search" placeholder="Search recipes..."><div class="cats" id="cats"></div></div>
+<div class="bg" id="grid"></div>
+</div>
+</div>
+
+<div class="view" id="v-detail"><div class="wrap" style="padding:56px 20px 80px" id="det"></div></div>
+
+<div class="view" id="v-shop"><div class="wrap" style="padding:56px 20px 80px" id="shopV"></div></div>
+
+<div class="cook" id="cook">
+<div class="cook-hdr"><span class="cook-title" id="cookT"></span><button class="cook-close" id="cookX">Exit</button></div>
+<div class="cook-body" id="cookB"></div>
+<div class="cook-bar"><div class="cook-bar-t"><div class="cook-bar-f" id="cookF"></div></div></div>
+</div>
+
+<div class="mo" id="mo"><div class="md">
+<h3>Dagdagan ang Recipe Book</h3>
+<div class="mf"><label class="ml">Pangalan</label><input class="mi" id="aN" placeholder="Lola's Adobo"></div>
+<div class="mf"><label class="ml">English Name</label><input class="mi" id="aA" placeholder="Chicken Adobo"></div>
+<div class="mr"><div class="mf"><label class="ml">Category</label><select class="mi" id="aC"><option value="ulam">Ulam</option><option value="merienda">Merienda</option><option value="panghimagas">Panghimagas</option></select></div><div class="mf"><label class="ml">Serves</label><input class="mi" id="aS" type="number" value="4"></div></div>
+<div class="mr"><div class="mf"><label class="ml">Prep min</label><input class="mi" id="aP" type="number" value="15"></div><div class="mf"><label class="ml">Cook min</label><input class="mi" id="aK" type="number" value="30"></div></div>
+<div class="mf"><label class="ml">Description</label><input class="mi" id="aD" placeholder="Short description"></div>
+<div class="mf"><label class="ml">Ingredients</label><div id="aIG"></div><button class="al" onclick="addIF()">+ Add</button></div>
+<div class="mf"><label class="ml">Steps</label><div id="aST"></div><button class="al" onclick="addSF()">+ Add</button></div>
+<div class="mb"><button class="btn btn-s" id="moC">Cancel</button><button class="btn btn-p" id="moS">Save</button></div>
+</div></div>
+
+<script>
+function $(id){return document.getElementById(id)}
+function esc(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML}
+function pad(n){return n<10?'0'+n:''+n}
+function fmtQ(n){if(!n||n===0)return'';if(n===Math.floor(n))return''+n;var w=Math.floor(n),f=n-w,fr=[[.125,'\u215B'],[.25,'\u00BC'],[.33,'\u2153'],[.5,'\u00BD'],[.67,'\u2154'],[.75,'\u00BE']],b=fr[0];for(var i=1;i<fr.length;i++){if(Math.abs(fr[i][0]-f)<Math.abs(b[0]-f))b=fr[i]}return w>0?w+' '+b[1]:b[1]}
+
+var RECIPES=[
+{id:1,name:"Adobong Manok at Baboy",alt:"Chicken & Pork Adobo",cat:"ulam",prep:15,cook:45,serv:4,
+desc:"The national dish. Every family guards their own version \u2014 this is the classic braise.",
+story:"Adobo is personal. Some add coconut milk, some fry it dry. This is how Lola made it.",
+ings:[[1,"kg","chicken pieces"],[500,"g","pork belly, cubed"],[.5,"cup","soy sauce"],[.25,"cup","white vinegar"],[1,"head","garlic, minced"],[1,"","onion, quartered"],[2,"","bay leaves"],[1,"tbsp","black peppercorns"],[1,"cup","water"],[2,"tbsp","cooking oil"]],
+steps:["Marinate chicken, pork, soy sauce, vinegar, garlic, and peppercorns for 30 minutes.","Heat oil. Saute onion until translucent.","Brown the meat on all sides, about 5 minutes.","Pour in marinade, water, and bay leaves. Bring to a boil.","Cover and simmer for 35 minutes until tender and sauce thickens.","Taste and adjust. Serve with hot white rice."],
+tip:"For crispy adobo, fry the braised meat separately until golden, then toss back into the reduced sauce."},
+
+{id:2,name:"Sinigang na Baboy",alt:"Pork Sinigang",cat:"ulam",prep:15,cook:50,serv:6,
+desc:"Sour, savory soup with pork ribs and vegetables. The ultimate rainy-day comfort.",
+story:"When the rain pours, a pot of sinigang makes everything right.",
+ings:[[1,"kg","pork ribs"],[1,"","onion, quartered"],[3,"","tomatoes, quartered"],[1,"bunch","kangkong"],[1,"bundle","sitaw, 3-inch cuts"],[2,"","labanos, sliced"],[3,"","siling haba"],[1,"pack","sinigang mix"],[8,"cups","water"],[0,"","patis to taste"]],
+steps:["Boil pork 10 minutes to remove scum. Drain and rinse.","In clean pot, boil 8 cups water with pork, onion, and tomatoes for 40 minutes.","Add sinigang mix and stir well.","Add labanos and sitaw. Cook 5 minutes.","Add kangkong and siling haba. Cook 2 minutes only.","Season with patis. Serve hot with rice and calamansi."],
+tip:"Fresh sampaloc gives brighter sourness than the packet mix. Ask your palengke vendor."},
+
+{id:3,name:"Kare-Kare",alt:"Oxtail Peanut Stew",cat:"ulam",prep:20,cook:150,serv:6,
+desc:"Rich, nutty oxtail stew in peanut sauce, served with bagoong alamang.",
+story:"The dish of fiestas. Origins debated but its place on the Filipino table is undisputed.",
+ings:[[1,"kg","oxtail, chunked"],[500,"g","tripe, cleaned"],[1,"cup","peanut butter"],[.25,"cup","ground toasted rice"],[1,"tbsp","atsuete in 3 tbsp water"],[1,"","onion, chopped"],[5,"cloves","garlic"],[8,"cups","water"],[1,"bunch","pechay"],[4,"pcs","sitaw"],[1,"","eggplant, sliced"],[0,"","bagoong alamang"]],
+steps:["Boil oxtail and tripe 2 to 2.5 hours until tender. Reserve broth.","Saute onion and garlic until fragrant.","Add oxtail. Stir 2 minutes.","Add 4 cups broth. Simmer gently.","Add strained annatto water. Stir until color is even.","Dissolve peanut butter in warm broth, add to pot. Stir smooth.","Add toasted rice to thicken. Simmer 10 minutes.","Add sitaw, eggplant (5 min), pechay (1 min). Serve with bagoong."],
+tip:"Toast raw rice in a dry pan until golden, then grind. This gives kare-kare its silky texture."},
+
+{id:4,name:"Tinolang Manok",alt:"Ginger Chicken Soup",cat:"ulam",prep:10,cook:35,serv:4,
+desc:"Light, gingery chicken soup with papaya and malunggay. Filipino penicillin.",
+ings:[[1,"kg","chicken, cut"],[1,"","green papaya, wedges"],["1","bunch","malunggay leaves"],[1,"thumb","ginger, sliced"],[1,"","onion"],[4,"cloves","garlic"],[2,"tbsp","patis"],[6,"cups","water"],[2,"tbsp","oil"]],
+steps:["Saute garlic, onion, ginger until fragrant and golden.","Add chicken. Brown for 5 minutes.","Pour in patis. Let it caramelize slightly.","Add water. Boil, then simmer 25 minutes.","Add papaya. Cook 8 minutes.","Add malunggay. Stir once. Cook 1 minute. Serve hot."],
+tip:"Papaya goes in first. Malunggay needs barely a minute or it turns bitter."},
+
+{id:5,name:"Lechon Kawali",alt:"Crispy Fried Pork Belly",cat:"ulam",prep:15,cook:120,serv:4,
+desc:"Boiled pork belly, deep-fried until the skin shatters. Pure indulgence.",
+ings:[[1,"kg","pork belly, whole slab"],[1,"head","garlic, crushed"],[2,"","bay leaves"],[1,"tbsp","peppercorns"],[1,"tbsp","salt"],[0,"","oil for frying"]],
+steps:["Boil pork with garlic, bay leaves, peppercorns, and salt for 1 to 1.5 hours.","Drain. Pat very dry with paper towels.","Refrigerate uncovered at least 1 hour (overnight is best).","Heat oil to 175C. Fry 8 to 10 minutes until deep golden.","Drain. Chop thick. Serve with liver sauce or spiced vinegar."],
+tip:"Dry the pork thoroughly and refrigerate uncovered overnight. Drier skin = shatteringly crisp."},
+
+{id:6,name:"Bicol Express",alt:"Spicy Coconut Pork",cat:"ulam",prep:15,cook:35,serv:4,
+desc:"Fiery Bicolano pork in coconut milk with lots of siling labuyo.",
+story:"Named after the Manila-Bicol train. In Bicol, they use even more chili.",
+ings:[[700,"g","pork belly strips"],[400,"ml","coconut milk"],[12,"pcs","siling labuyo, chopped"],[5,"cloves","garlic"],[1,"","onion"],[1,"thumb","ginger"],[2,"tbsp","bagoong alamang"]],
+steps:["Cook pork until fat renders and meat browns, about 8 minutes.","Add garlic, onion, ginger. Saute 2 minutes.","Add bagoong alamang. Stir 1 minute.","Pour in coconut milk. Simmer gently.","Add siling labuyo. Stir well.","Simmer 20 to 25 minutes until sauce thickens and oil separates. Serve with rice."],
+tip:"When coconut oil separates and glistens on top, Bicol express is ready."},
+
+{id:7,name:"Pancit Canton",alt:"Stir-Fried Noodles",cat:"ulam",prep:15,cook:20,serv:5,
+desc:"Stir-fried noodles with pork, shrimp, and vegetables. A birthday must-have.",
+ings:[[500,"g","pancit canton noodles"],[250,"g","pork, sliced"],[150,"g","shrimp, peeled"],[1,"cup","cabbage, shredded"],[1,"","carrot, julienned"],[1,"bundle","sitaw, sliced"],[1,"","onion"],[4,"cloves","garlic"],[3,"tbsp","soy sauce"],[2,"tbsp","oyster sauce"],[2,"cups","chicken broth"],[2,"tbsp","oil"],[0,"","calamansi"]],
+steps:["Saute garlic and onion 1 minute.","Add pork. Brown 4 minutes.","Add shrimp. Cook until pink, 2 minutes.","Add carrots and sitaw. Stir-fry 2 minutes.","Pour in broth, soy sauce, oyster sauce. Boil.","Add noodles. Toss constantly 5 minutes.","Add cabbage. Toss 1 minute. Serve with calamansi."],
+tip:"Don't overcook noodles. They should absorb liquid gradually while staying springy."},
+
+{id:8,name:"Leche Flan",alt:"Caramel Custard",cat:"panghimagas",prep:20,cook:50,serv:8,
+desc:"Silky caramel custard \u2014 the crown jewel of every fiesta table.",
+story:"Arrived during the Spanish era and became thoroughly Filipino. Every lola makes the best one.",
+ings:[[10,"","egg yolks"],[1,"can","condensed milk (390g)"],[1,"can","evaporated milk (390g)"],[1,"tsp","vanilla"],[1,"cup","sugar for caramel"]],
+steps:["Melt sugar in a llanera over medium heat, swirling gently until golden amber. Tilt to coat.","Whisk yolks, condensed milk, evaporated milk, vanilla gently \u2014 avoid bubbles.","Strain twice through a fine sieve for silky texture.","Pour into the caramel-lined mold. Cover with foil.","Steam 40 to 45 minutes until a toothpick comes out clean.","Cool, then refrigerate at least 4 hours.","Flip onto a plate \u2014 the caramel pours like liquid gold."],
+tip:"Steaming (not baking) gives denser, silkier custard. Strain twice and tap mold to release air bubbles."}
+];
+
+var SECS=[{id:'meat',name:'Karne at Isda',keys:['chicken','pork','beef','shrimp','oxtail','tripe']},{id:'veg',name:'Gulay',keys:['onion','garlic','tomato','kangkong','sitaw','pechay','eggplant','papaya','carrot','cabbage','labanos','ginger','chili','malunggay','siling']},{id:'dry',name:'Bigas at Iba Pa',keys:['rice','noodles','peppercorn','bay leaf','sugar']},{id:'cond',name:'Sawsawan',keys:['soy sauce','vinegar','patis','oyster sauce','bagoong','peanut butter','liver spread','coconut milk','atsuete','tomato sauce']},{id:'dairy',name:'Gatas at Itlog',keys:['evaporated milk','condensed milk','egg','vanilla']},{id:'other',name:'Iba Pa',keys:[]}];
+function getSec(item){var l=item.toLowerCase();for(var i=0;i<SECS.length;i++){for(var j=0;j<SECS[i].keys.length;j++){if(l.indexOf(SECS[i].keys[j])>=0)return SECS[i].id}}return'other'}
+var PRICES={chicken:180,pork:200,beef:420,shrimp:300,oxtail:350,tripe:150,onion:25,garlic:15,tomato:30,kangkong:20,sitaw:25,pechay:15,eggplant:20,papaya:35,carrot:30,cabbage:35,labanos:30,ginger:20,chili:10,malunggay:15,'soy sauce':45,vinegar:25,patis:35,'oyster sauce':55,bagoong:45,'peanut butter':85,'liver spread':65,'coconut milk':55,atsuete:20,'evaporated milk':42,'condensed milk':55,egg:12,vanilla:30,sugar:45,'bay leaf':10,peppercorn:25,noodles:55};
+function estP(item,qty,unit){var l=item.toLowerCase();for(var k in PRICES){if(l.indexOf(k)>=0){var m=1;if(unit==='kg')m=1;else if(unit==='g')m=qty/1000;else if(unit==='cup')m=.3;else if(unit==='tbsp'||unit==='tsp')m=.05;else if(unit==='can'||unit==='pack')m=1;else if(unit==='head')m=.15;else if(unit==='bunch'||unit==='bundle')m=1;else m=qty*.1;return Math.round(PRICES[k]*Math.max(m,.1))}}return 0}
+
+var favs=JSON.parse(localStorage.getItem('l-f')||'[]');
+var shop=JSON.parse(localStorage.getItem('l-s')||'[]');
+var doneI=JSON.parse(localStorage.getItem('l-di')||'[]');
+var doneS=JSON.parse(localStorage.getItem('l-ds')||'[]');
+var customs=JSON.parse(localStorage.getItem('l-c')||'[]');
+var curCat='all',curServ={},curStep=0,timerInt=null,timerSec=0,cookR=null,curView='home';
+function sv(k,v){localStorage.setItem('l-'+k,JSON.stringify(v))}
+function allR(){return RECIPES.concat(customs)}
+function findR(id){var a=allR();for(var i=0;i<a.length;i++){if(a[i].id===id)return a[i]}return null}
+function hasF(id){return favs.indexOf(id)>=0}
+function togF(id){var i=favs.indexOf(id);if(i>=0)favs.splice(i,1);else favs.push(id);sv('f',favs);renderGrid()}
+
+function goView(v){curView=v;var vs=document.querySelectorAll('.view');for(var i=0;i<vs.length;i++)vs[i].classList.remove('on');$('v-'+v).classList.add('on');document.body.className=v!=='home'?'show-back':'';window.scrollTo(0,0);if(v==='shop')renderShop();if(v==='home')renderGrid()}
+$('back').onclick=function(){goView('home')};
+$('shopBtn').onclick=function(){goView('shop')};
+$('addBtn').onclick=function(){openAdd()};
+
+var CATS=[{id:'all',l:'Lahat'},{id:'ulam',l:'Ulam'},{id:'merienda',l:'Merienda'},{id:'panghimagas',l:'Panghimagas'}];
+function renderCats(){var h='';for(var i=0;i<CATS.length;i++){h+='<button class="cat'+(CATS[i].id===curCat?' on':'')+'" data-c="'+CATS[i].id+'">'+CATS[i].l+'</button>'}$('cats').innerHTML=h;var bs=$('cats').querySelectorAll('.cat');for(var j=0;j<bs.length;j++){(function(b){b.onclick=function(){curCat=b.dataset.c;renderCats();renderGrid()}})(bs[j])}}
+
+function renderGrid(){
+var q=$('search').value.toLowerCase().trim(),list=allR();
+if(curCat!=='all'){var fl=[];for(var i=0;i<list.length;i++){if(list[i].cat===curCat)fl.push(list[i])}list=fl}
+if(q){var ql=[];for(var i=0;i<list.length;i++){if((list[i].name+' '+list[i].alt+' '+list[i].desc).toLowerCase().indexOf(q)>=0)ql.push(list[i])}list=ql}
+if(!list.length){$('grid').innerHTML='<div class="empty">Wala kang nahanap.</div>';return}
+var h='';for(var i=0;i<list.length;i++){var r=list[i],f=hasF(r.id);var init=r.name.charAt(0);
+h+='<div class="bk-card" style="animation-delay:'+(i*.06)+'s" onclick="showDet('+r.id+')"><div class="bk"><div class="bk-front"><div class="bk-spine"></div><div class="bk-pages"></div><div class="bk-content"><div class="bk-init">'+init+'</div><div class="bk-name">'+esc(r.name)+'</div><div class="bk-alt">'+esc(r.alt)+'</div><div class="bk-line"></div><div class="bk-meta">'+(r.prep+r.cook)+' min</div></div><button class="bk-fav'+(f?' on':'')+'" onclick="event.stopPropagation();togF('+r.id+')">'+(f?'\u2665':'\u2661')+'</button></div></div></div>'}
+$('grid').innerHTML=h}
+$('search').oninput=renderGrid;
+
+function showDet(id){
+var r=findR(id);if(!r)return;if(!curServ[id])curServ[id]=r.serv;
+var s=curServ[id],ratio=s/r.serv,f=hasF(id),inS=false;
+for(var i=0;i<shop.length;i++){if(shop[i].rid===id){inS=true;break}}
+var h='<div class="sp-head"><div class="cat-l">'+r.cat+'</div><h1>'+esc(r.name)+'</h1><div class="alt">'+esc(r.alt)+'</div><div class="rule"></div><div class="bk-init" style="width:52px;height:52px;font-size:28px;margin:0 auto">'+r.name.charAt(0)+'</div></div>';
+h+='<blockquote class="sp-desc">'+esc(r.desc)+'</blockquote>';
+h+='<div class="sp-book"><div class="pg-l">';
+h+='<div class="stats"><div class="stat"><div class="sl">Prep</div><div class="sv">'+r.prep+'m</div></div><div class="stat"><div class="sl">Cook</div><div class="sv">'+r.cook+'m</div></div><div class="stat"><div class="sl">Serves</div><div class="sv">'+s+'</div></div></div>';
+h+='<div class="serv-bar"><span class="serv-lbl">Serving</span><button class="serv-btn" onclick="adjServ('+id+',-1)">\u2212</button><span class="serv-v">'+s+'</span><button class="serv-btn" onclick="adjServ('+id+',1)">+</button></div>';
+h+='<div class="pg-h">Sangkap</div><ul class="ings">';
+for(var i=0;i<r.ings.length;i++){var ig=r.ings[i],amt=ig[0]*ratio,done=doneI.indexOf(id+'-'+i)>=0;h+='<li class="'+(done?'done':'')+'" onclick="togIng('+id+','+i+')"><span class="ichk">'+(done?'\u2713':'')+'</span><span class="iamt">'+fmtQ(amt)+' '+ig[1]+'</span><span>'+esc(ig[2])+'</span></li>'}
+h+='</ul></div><div class="pg-r"><div class="pg-h">Paraan</div><ol class="stps">';
+for(var i=0;i<r.steps.length;i++){h+='<li>'+esc(r.steps[i])+'</li>'}
+h+='</ol>';
+if(r.story)h+='<div class="story-b"><strong>Kwento:</strong> '+esc(r.story)+'</div>';
+if(r.tip)h+='<div class="tip-b"><strong>Tip ni Lola:</strong> '+esc(r.tip)+'</div>';
+h+='</div></div>';
+h+='<div class="acts"><button class="ab ab-cook" onclick="startCook('+id+')">Luto Na</button><button class="ab ab-fav'+(f?' on':'')+'" onclick="togF('+id+');showDet('+id+')">'+(f?'\u2665 Saved':'\u2661 Save')+'</button><button class="ab ab-shop" onclick="addShop('+id+')">'+(inS?'\u2713 Nasa List':'Pamilihan')+'</button></div>';
+$('det').innerHTML=h;goView('detail')}
+function adjServ(id,d){var r=findR(id);if(!r)return;if(!curServ[id])curServ[id]=r.serv;curServ[id]=Math.max(1,curServ[id]+d);showDet(id)}
+function togIng(rid,i){var k=rid+'-'+i,ix=doneI.indexOf(k);if(ix>=0)doneI.splice(ix,1);else doneI.push(k);sv('di',doneI);showDet(rid)}
+
+function addShop(rid){for(var i=0;i<shop.length;i++){if(shop[i].rid===rid){toast('Nasa list na!');return}}var r=findR(rid);if(!r)return;for(var i=0;i<r.ings.length;i++){var ig=r.ings[i];if(ig[0]>0)shop.push({rid:rid,name:ig[2],amt:ig[0],unit:ig[1],sec:getSec(ig[2])})}sv('s',shop);updSN();toast('Idinagdag!')}
+function renderShop(){
+if(!shop.length){$('shopV').innerHTML='<div class="sh-h"><h1>Pamili<em>han</em></h1><p style="color:var(--c3);margin-top:8px;font-style:italic">Browse recipes at pindutin ang Pamilihan.</p></div>';return}
+var h='<div class="sh-h"><h1>Pamili<em>han</em></h1></div><div class="sh-cnt">'+shop.length+' items</div>';
+var grps={};for(var i=0;i<shop.length;i++){var s=shop[i];if(!grps[s.sec])grps[s.sec]=[];grps[s.sec].push({idx:i,name:s.name,amt:s.amt,unit:s.unit})}
+var total=0;
+for(var si=0;si<SECS.length;si++){var sec=SECS[si];if(!grps[sec.id])continue;h+='<div class="sh-sec">'+sec.name+'</div>';for(var j=0;j<grps[sec.id].length;j++){var it=grps[sec.id][j],done=doneS.indexOf(it.idx)>=0,price=estP(it.name,it.amt,it.unit);if(!done)total+=price;h+='<div class="sh-i'+(done?' done':'')+'" onclick="togShop('+it.idx+')"><span class="ichk">'+(done?'\u2713':'')+'</span><span>'+fmtQ(it.amt)+' '+it.unit+' '+esc(it.name)+'</span><span class="sh-price">'+(price?'~\u20B1'+price:'')+'</span></div>'}}
+h+='<div class="sh-total"><span class="sh-total-l">Estimated Total</span><span class="sh-total-v">~\u20B1'+total.toLocaleString()+'</span></div>';
+h+='<div style="margin-top:14px"><button class="btn btn-s" onclick="clearShop()">Clear All</button></div>';
+$('shopV').innerHTML=h}
+function togShop(i){var ix=doneS.indexOf(i);if(ix>=0)doneS.splice(ix,1);else doneS.push(i);sv('ds',doneS);renderShop()}
+function clearShop(){shop=[];doneS=[];sv('s',[]);sv('ds',[]);updSN();renderShop()}
+function updSN(){$('sN').textContent=shop.length}
+
+function parseTime(text){var m=text.match(/(\d+)\s*(?:to|-)?\s*(\d+)?\s*(minute|min|hour|hr)/i);if(!m)return null;var n=m[2]?Math.max(+m[1],+m[2]):+m[1];return(m[3].toLowerCase().charAt(0)==='h')?n*60:n}
+function hlTime(t){return t.replace(/(\d+)(?:\s*(?:to|-)\s*(\d+))?\s*(minutes?|mins?|hours?|hrs?)/gi,'<span class="thl">$&</span>')}
+function startCook(id){cookR=findR(id);if(!cookR)return;curStep=0;renderMise();$('cook').classList.add('on');$('cookT').textContent=cookR.name}
+function renderMise(){var tasks=[];for(var i=0;i<cookR.ings.length;i++){var ig=cookR.ings[i];if(ig[0]>0)tasks.push(fmtQ(ig[0])+' '+ig[1]+' '+ig[2].split(',')[0])}var h='<div class="mise"><h3>Mise en Place</h3><p>Ihanda lahat bago magluto</p><div class="mise-g">';for(var i=0;i<tasks.length;i++){h+='<div class="mise-i" onclick="this.classList.toggle(\'done\');this.querySelector(\'.mise-c\').textContent=this.classList.contains(\'done\')?\'\u2713\':\'\'"><span class="mise-c"></span>'+esc(tasks[i])+'</div>'}h+='</div><div style="margin-top:20px"><button class="btn btn-p" onclick="cookRender(0)">Magluto Na \u2192</button></div></div>';$('cookB').innerHTML=h;$('cookF').style.width='0%'}
+function cookRender(idx){if(!cookR)return;if(idx>=cookR.steps.length){$('cookB').innerHTML='<div class="cook-done"><h2>Kain na!</h2><p>Ang '+esc(cookR.name)+' ay handa na.</p><div class="cook-nav" style="justify-content:center;margin-top:20px"><button class="cn-n" onclick="exitCook()">Tapos Na</button></div></div>';$('cookF').style.width='100%';return}
+curStep=idx;var st=cookR.steps[idx],pct=(idx+1)/cookR.steps.length*100,tm=parseTime(st);
+var h='<div class="cook-step">Hakbang '+(idx+1)+' ng '+cookR.steps.length+'</div><div class="cook-num">'+(idx+1)+'</div><div class="cook-text">'+hlTime(esc(st))+'</div>';
+if(tm)h+='<div class="cook-timer"><button class="cook-tbtn" onclick="startTmr('+tm+')">\u23F1 '+tm+' Minuto</button><div class="cook-td" id="tmrD"></div></div>';
+h+='<div class="cook-nav">';if(idx>0)h+='<button class="cn-p" onclick="cookRender('+(idx-1)+')">\u2190 Bumalik</button>';
+h+='<button class="cn-n" onclick="cookRender('+(idx+1)+')">'+(idx===cookR.steps.length-1?'Tapos Na':'Susunod \u2192')+'</button></div>';
+$('cookB').innerHTML=h;$('cookF').style.width=pct+'%'}
+function startTmr(min){timerSec=min*60;clearInterval(timerInt);timerInt=setInterval(function(){timerSec--;var d=$('tmrD');if(d)d.textContent=pad(Math.floor(timerSec/60))+':'+pad(timerSec%60);if(timerSec<=0){clearInterval(timerInt);toast('Oras na!')}},1000)}
+function exitCook(){$('cook').classList.remove('on');clearInterval(timerInt);cookR=null}
+$('cookX').onclick=exitCook;
+
+function openAdd(){$('aN').value='';$('aA').value='';$('aD').value='';$('aP').value=15;$('aK').value=30;$('aS').value=4;$('aIG').innerHTML='';$('aST').innerHTML='';addIF();addIF();addIF();addSF();addSF();$('mo').classList.add('open')}
+function closeAdd(){$('mo').classList.remove('open')}
+$('moC').onclick=closeAdd;$('mo').onclick=function(e){if(e.target.id==='mo')closeAdd()};
+function addIF(){var d=document.createElement('div');d.className='ma';d.innerHTML='<input placeholder="1" style="max-width:34px" class="if-a"><input placeholder="cup" style="max-width:42px" class="if-u"><input placeholder="sangkap" class="if-n"><button onclick="this.parentElement.remove()">\u00d7</button>';$('aIG').appendChild(d)}
+function addSF(){var d=document.createElement('div');d.className='ma';d.innerHTML='<input placeholder="Hakbang..." class="if-st"><button onclick="this.parentElement.remove()">\u00d7</button>';$('aST').appendChild(d)}
+$('moS').onclick=function(){var name=$('aN').value.trim();if(!name){toast('Lagyan ng pangalan!');return}
+var ings=[];var igE=$('aIG').querySelectorAll('.ma');for(var i=0;i<igE.length;i++){var el=igE[i],a=parseFloat(el.querySelector('.if-a').value)||0,u=el.querySelector('.if-u').value.trim(),n=el.querySelector('.if-n').value.trim();if(n)ings.push([a,u,n])}
+var steps=[];var stE=$('aST').querySelectorAll('.ma');for(var i=0;i<stE.length;i++){var s=stE[i].querySelector('.if-st').value.trim();if(s)steps.push(s)}
+if(!ings.length||!steps.length){toast('Lagyan ng sangkap at hakbang!');return}
+customs.push({id:Date.now(),name:name,alt:$('aA').value.trim(),cat:$('aC').value,prep:+$('aP').value||0,cook:+$('aK').value||0,serv:+$('aS').value||4,desc:$('aD').value.trim(),story:'',ings:ings,steps:steps,tip:''});sv('c',customs);closeAdd();renderGrid();toast('Recipe saved!')};
+
+function toast(m){var t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);setTimeout(function(){if(t.parentNode)t.remove()},2500)}
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeAdd();if($('cook').classList.contains('on'))exitCook();else if(curView!=='home')goView('home')}});
+
+renderCats();renderGrid();updSN();
+</script>
+</body>
+</html>
